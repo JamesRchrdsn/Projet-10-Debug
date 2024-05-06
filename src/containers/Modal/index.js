@@ -13,6 +13,7 @@ const Modal = ({ opened, Content, children }) => {
           <div className="content">
             {Content}
             <button
+              aria-label="Fermeture de la modal"
               type="button"
               data-testid="close-modal"
               onClick={() => setIsOpened(false)}
@@ -28,12 +29,12 @@ const Modal = ({ opened, Content, children }) => {
 
 Modal.defaultProps = {
   opened: false,
-}
+};
 
 Modal.propTypes = {
   opened: PropTypes.bool,
   Content: PropTypes.node.isRequired,
   children: PropTypes.func.isRequired,
-}
+};
 
 export default Modal;

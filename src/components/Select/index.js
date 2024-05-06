@@ -51,6 +51,7 @@ const Select = ({
         </ul>
         <input type="hidden" value={value || ""} name={name} />
         <button
+          aria-label="Déployer les options"
           type="button"
           data-testid="collapse-button-testid"
           className={collapsed ? "open" : "close"}
@@ -88,7 +89,7 @@ Select.propTypes = {
   titleEmpty: PropTypes.bool,
   label: PropTypes.string,
   type: PropTypes.string,
-}
+};
 
 Select.defaultProps = {
   onChange: () => null,
@@ -96,6 +97,6 @@ Select.defaultProps = {
   label: "",
   type: "normal",
   name: "select",
-}
+};
 
 export default Select;
