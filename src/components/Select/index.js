@@ -1,8 +1,7 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-
 import "./style.scss";
 
 const Select = ({
@@ -12,48 +11,81 @@ const Select = ({
   titleEmpty,
   label,
   type = "normal",
+  value,
 }) => {
-  const [value, setValue] = useState();
   const [collapsed, setCollapsed] = useState(true);
+  const [selectedValue, setSelectedValue] = useState(value);
+
+  useEffect(() => {
+    setSelectedValue(value);
+  }, [value]);
+
   const changeValue = (newValue) => {
     onChange(newValue);
-    setValue(newValue);
+    setSelectedValue(newValue);
     setCollapsed(true);
   };
+
+  const handleKeyDown = (e, newValue) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      changeValue(newValue);
+    }
+  };
+
   return (
     <div className={`SelectContainer ${type}`} data-testid="select-testid">
       {label && <div className="label">{label}</div>}
       <div className="Select">
-        <ul>
-          <li className={collapsed ? "SelectTitle--show" : "SelectTitle--hide"}>
-            {value || (!titleEmpty && "Toutes")}
-          </li>
-          {!collapsed && (
-            <>
-              {!titleEmpty && (
-                <li onClick={() => changeValue(null)}>
-                  <input defaultChecked={!value} name="selected" type="radio" />{" "}
-                  Toutes
-                </li>
-              )}
-              {selection.map((s) => (
-                <li key={s} onClick={() => changeValue(s)}>
+        <button
+          type="button"
+          className={collapsed ? "SelectTitle--show" : "SelectTitle--hide"}
+          onClick={() => setCollapsed(!collapsed)}
+          onKeyDown={(e) => handleKeyDown(e, null)}
+          aria-expanded={!collapsed}
+        >
+          {selectedValue || (!titleEmpty && "Toutes")}
+        </button>
+        {!collapsed && (
+          <ul>
+            {!titleEmpty && (
+              <li>
+                <button
+                  type="button"
+                  onClick={() => changeValue("")}
+                  onKeyDown={(e) => handleKeyDown(e, "")}
+                >
                   <input
-                    defaultChecked={value === s}
+                    defaultChecked={!selectedValue}
+                    name="selected"
+                    type="radio"
+                  />{" "}
+                  Toutes
+                </button>
+              </li>
+            )}
+            {selection.map((s) => (
+              <li key={s}>
+                <button
+                  type="button"
+                  onClick={() => changeValue(s)}
+                  onKeyDown={(e) => handleKeyDown(e, s)}
+                >
+                  <input
+                    defaultChecked={selectedValue === s}
                     name="selected"
                     type="radio"
                   />{" "}
                   {s}
-                </li>
-              ))}
-            </>
-          )}
-        </ul>
-        <input type="hidden" value={value || ""} name={name} />
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+        <input type="hidden" value={selectedValue || ""} name={name} />
         <button
           aria-label="Déployer les options"
           type="button"
-          data-testid="collapse-button-testid"
           className={collapsed ? "open" : "close"}
           onClick={(e) => {
             e.preventDefault();
@@ -89,6 +121,7 @@ Select.propTypes = {
   titleEmpty: PropTypes.bool,
   label: PropTypes.string,
   type: PropTypes.string,
+  value: PropTypes.string.isRequired,
 };
 
 Select.defaultProps = {
