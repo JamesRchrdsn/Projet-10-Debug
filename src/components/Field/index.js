@@ -8,9 +8,9 @@ export const FIELD_TYPES = {
 
 const Field = ({
   type = FIELD_TYPES.INPUT_TEXT,
-  label,
+  label = "",
   name,
-  placeholder,
+  placeholder = "",
   value,
   onChange,
 }) => {
@@ -63,14 +63,8 @@ Field.propTypes = {
   name: PropTypes.string.isRequired,
   label: PropTypes.string,
   placeholder: PropTypes.string,
-  value: PropTypes.string.isRequired,
+  value: PropTypes.string,
   onChange: PropTypes.func.isRequired,
-};
-
-Field.defaultProps = {
-  label: "",
-  placeholder: "",
-  type: FIELD_TYPES.INPUT_TEXT,
 };
 
 export default Field;

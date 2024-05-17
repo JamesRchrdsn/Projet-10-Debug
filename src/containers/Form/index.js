@@ -9,7 +9,7 @@ const mockContactApi = () =>
     setTimeout(resolve, 1000);
   });
 
-const Form = ({ onSuccess, onError }) => {
+const Form = ({ onSuccess = () => null, onError = () => null }) => {
   const [sending, setSending] = useState(false);
   const [formData, setFormData] = useState({
     nom: "",
@@ -79,14 +79,14 @@ const Form = ({ onSuccess, onError }) => {
           <Field
             name="nom"
             value={formData.nom}
-            placeholder=""
+            placeholder="Nom"
             label="Nom"
             onChange={handleChange}
           />
           <Field
             name="prenom"
             value={formData.prenom}
-            placeholder=""
+            placeholder="Prénom"
             label="Prénom"
             onChange={handleChange}
           />
@@ -102,12 +102,16 @@ const Form = ({ onSuccess, onError }) => {
           <Field
             name="email"
             value={formData.email}
-            placeholder=""
+            placeholder="Email"
             label="Email"
             onChange={handleChange}
           />
           {error && <p className="error">{error}</p>}
-          <Button type={BUTTON_TYPES.SUBMIT} disabled={sending}>
+          <Button
+            type={BUTTON_TYPES.SUBMIT}
+            data-testid="button-test-id"
+            disabled={sending}
+          >
             {sending ? "En cours" : "Envoyer"}
           </Button>
         </div>
@@ -115,7 +119,7 @@ const Form = ({ onSuccess, onError }) => {
           <Field
             name="message"
             value={formData.message}
-            placeholder="message"
+            placeholder="Message"
             label="Message"
             type={FIELD_TYPES.TEXTAREA}
             onChange={handleChange}
@@ -129,11 +133,6 @@ const Form = ({ onSuccess, onError }) => {
 Form.propTypes = {
   onError: PropTypes.func,
   onSuccess: PropTypes.func,
-};
-
-Form.defaultProps = {
-  onError: () => null,
-  onSuccess: () => null,
 };
 
 export default Form;

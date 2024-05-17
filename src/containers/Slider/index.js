@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useData } from "../../contexts/DataContext";
 import { getMonth } from "../../helpers/Date";
-
 import "./style.scss";
 
 const Slider = () => {
@@ -9,20 +8,21 @@ const Slider = () => {
   const [index, setIndex] = useState(0);
 
   const nextCard = () => {
-    setTimeout(
-      () =>
-        setIndex(data.focus.length > 0 ? (index + 1) % data.focus.length : 0),
-      5000
-    );
+    if (data.focus && data.focus.length > 0) {
+      setTimeout(() => setIndex((index + 1) % data.focus.length), 5000);
+    }
   };
   useEffect(() => {
     nextCard();
     return () => clearTimeout(nextCard);
   }, [index, data.focus]);
+  if (!data.focus || data.focus.length === 0) {
+    return null;
+  }
   return (
     <div className="SlideCardList">
       {data.focus.map((event, idx) => (
-        <React.Fragment key={event.id || idx}>
+        <React.Fragment key={`slide-${event.id}`}>
           <div
             className={`SlideCard SlideCard--${
               index === idx ? "display" : "hide"
@@ -39,13 +39,14 @@ const Slider = () => {
           </div>
           <div className="SlideCard__paginationContainer">
             <div className="SlideCard__pagination">
-              {data.focus.map((_, radioIdx) => (
+              {data.focus.map((focus, radioIdx) => (
                 <input
-                  key={`${event.id}`}
+                  key={`pagination-${focus.id}`}
                   type="radio"
                   name="radio-button"
                   checked={index === radioIdx}
                   readOnly
+                  onChange={() => setIndex(radioIdx)}
                 />
               ))}
             </div>

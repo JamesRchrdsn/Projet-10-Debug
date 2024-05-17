@@ -3,7 +3,7 @@ import Field, { FIELD_TYPES } from "./index";
 
 describe("When a field is created", () => {
   it("a name is set on the field", () => {
-    render(<Field name="field-name" />);
+    render(<Field name="field-name" value="" onChange={() => {}} />);
     const fieldElement = screen.getByTestId("field-testid");
     expect(fieldElement).toBeInTheDocument();
     expect(fieldElement.name).toEqual("field-name");
@@ -15,7 +15,9 @@ describe("When a field is created", () => {
   });
 
   it("a label is set with field", () => {
-    render(<Field placeholder="field-placeholder" label="field_label" name="test" />);
+    render(
+      <Field placeholder="field-placeholder" label="field_label" name="test" />
+    );
     const labelElement = screen.getByText(/field_label/);
     expect(labelElement).toBeInTheDocument();
   });

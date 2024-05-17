@@ -6,10 +6,10 @@ import "./style.scss";
 
 const Select = ({
   selection,
-  onChange,
-  name,
-  titleEmpty,
-  label,
+  onChange = () => null,
+  name = "select",
+  titleEmpty = false,
+  label = "",
   type = "normal",
   value,
 }) => {
@@ -38,6 +38,7 @@ const Select = ({
       {label && <div className="label">{label}</div>}
       <div className="Select">
         <button
+          data-testid="collapse-button-testid"
           type="button"
           className={collapsed ? "SelectTitle--show" : "SelectTitle--hide"}
           onClick={() => setCollapsed(!collapsed)}
@@ -121,15 +122,7 @@ Select.propTypes = {
   titleEmpty: PropTypes.bool,
   label: PropTypes.string,
   type: PropTypes.string,
-  value: PropTypes.string.isRequired,
-};
-
-Select.defaultProps = {
-  onChange: () => null,
-  titleEmpty: false,
-  label: "",
-  type: "normal",
-  name: "select",
+  value: PropTypes.string,
 };
 
 export default Select;

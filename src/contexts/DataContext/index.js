@@ -1,7 +1,11 @@
 import PropTypes from "prop-types";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
-const DataContext = createContext({});
+const DataContext = createContext({
+  data: { events: [], focus: [] },
+  error: null,
+  last: null,
+});
 
 export const api = {
   loadData: async () => {
@@ -28,7 +32,7 @@ export const DataProvider = ({ children }) => {
           setLast(loadedData.events[loadedData.events.length - 1]);
         }
       } catch (err) {
-        setError(err.message || "Failed to load data");
+        setError(err.message || "error on calling events");
       }
     };
 
