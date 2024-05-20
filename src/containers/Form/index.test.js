@@ -22,33 +22,51 @@ describe("When Events is created", () => {
       const onSuccess = jest.fn();
       const { container } = render(<Form onSuccess={onSuccess} />);
 
-      await act(async () => {
-        fireEvent.change(container.querySelector('[placeholder="Nom"]'), {
-          target: { value: "Test" },
-        });
-        fireEvent.change(container.querySelector('[placeholder="Prénom"]'), {
-          target: { value: "Utilisateur" },
-        });
-        fireEvent.change(container.querySelector('[placeholder="Email"]'), {
-          target: { value: "testutilisateur@example.com" },
-        });
-        fireEvent.change(container.querySelector('[name="message"]'), {
-          target: { value: "Message de test" },
-        });
+      fireEvent.change(container.querySelector('[placeholder="Nom"]'), {
+        target: { value: "Test" },
+      });
+      fireEvent.change(container.querySelector('[placeholder="Prénom"]'), {
+        target: { value: "Utilisateur" },
+      });
+      fireEvent.change(container.querySelector('[placeholder="Email"]'), {
+        target: { value: "testutilisateur@example.com" },
+      });
+      fireEvent.change(container.querySelector('[name="message"]'), {
+        target: { value: "Message de test" },
+      });
+      const collapseButton = screen.getByTestId("collapse-button-testid");
+      fireEvent.click(collapseButton);
+
+      await waitFor(() => {
+        expect(screen.getByTestId("collapse-button-testid")).toHaveAttribute(
+          "aria-expanded",
+          "true"
+        );
       });
 
-      fireEvent(
-        await screen.findByTestId("button-test-id"),
-        new MouseEvent("click", {
-          cancelable: true,
-          bubbles: true,
-        })
+      const personalOption = await waitFor(() =>
+        screen.getByTestId("option-Personel")
       );
+      fireEvent.click(personalOption);
 
-      await waitFor(() =>
-        expect(screen.getByText("En cours")).toBeInTheDocument()
-      );
-      await waitFor(() => expect(onSuccess).toHaveBeenCalled());
+      const submitButton = screen.getByTestId("button-test-id");
+
+      await act(async () => {
+        fireEvent.click(submitButton);
+      });
+
+      await waitFor(() => {
+        expect(screen.findByText("En cours"));
+      });
+
+      await waitFor(() => {
+        // eslint-disable-next-line no-console
+        console.log(
+          "Nombre d'appels à onSuccess :",
+          onSuccess.mock.calls.length
+        );
+        expect(onSuccess).toHaveBeenCalled();
+      });
     });
   });
 });

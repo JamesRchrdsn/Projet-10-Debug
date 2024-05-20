@@ -49,7 +49,6 @@ const Form = ({ onSuccess = () => null, onError = () => null }) => {
         setError("Tous les champs doivent être remplis.");
         return;
       }
-
       setSending(true);
       setError("");
 

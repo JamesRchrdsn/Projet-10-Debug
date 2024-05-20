@@ -69,6 +69,7 @@ const Select = ({
               <li key={s}>
                 <button
                   type="button"
+                  data-testid={`option-${s}`}
                   onClick={() => changeValue(s)}
                   onKeyDown={(e) => handleKeyDown(e, s)}
                 >
