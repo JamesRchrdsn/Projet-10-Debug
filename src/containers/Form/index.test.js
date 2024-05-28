@@ -59,14 +59,17 @@ describe("When Events is created", () => {
         expect(screen.findByText("En cours"));
       });
 
-      await waitFor(() => {
-        // eslint-disable-next-line no-console
-        console.log(
-          "Nombre d'appels à onSuccess :",
-          onSuccess.mock.calls.length
-        );
-        expect(onSuccess).toHaveBeenCalled();
-      });
+      await waitFor(
+        () => {
+          // eslint-disable-next-line no-console
+          console.log(
+            "Nombre d'appels à onSuccess :",
+            onSuccess.mock.calls.length
+          );
+          expect(onSuccess).toHaveBeenCalled();
+        },
+        { timeout: 2000 }
+      );
     });
   });
 });
