@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import Field, { FIELD_TYPES } from "./index";
 
 describe("When a field is created", () => {
+  const mockOnChange = jest.fn();
   it("a name is set on the field", () => {
     render(<Field name="field-name" value="" onChange={() => {}} />);
     const fieldElement = screen.getByTestId("field-testid");
@@ -9,14 +10,25 @@ describe("When a field is created", () => {
     expect(fieldElement.name).toEqual("field-name");
   });
   it("a placeholder is set on the field", () => {
-    render(<Field placeholder="field-placeholder" name="test" />);
+    render(
+      <Field
+        placeholder="field-placeholder"
+        name="test"
+        onChange={mockOnChange}
+      />
+    );
     const fieldElement = screen.getByTestId("field-testid");
     expect(fieldElement.placeholder).toEqual("field-placeholder");
   });
 
   it("a label is set with field", () => {
     render(
-      <Field placeholder="field-placeholder" label="field_label" name="test" />
+      <Field
+        placeholder="field-placeholder"
+        label="field_label"
+        name="test"
+        onChange={mockOnChange}
+      />
     );
     const labelElement = screen.getByText(/field_label/);
     expect(labelElement).toBeInTheDocument();
